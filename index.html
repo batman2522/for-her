@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Special Story 💖</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Background Hearts */
+    .bg-heart {
+      position: fixed;
+      bottom: -40px;
+      pointer-events: none;
+      opacity: 0.6;
+      animation: floatUp linear forwards;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-110vh) scale(1.3) rotate(360deg); opacity: 0; }
+    }
+
+    /* Click Spawn Heart */
+    .click-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 24px;
+      animation: popHeart 0.8s ease-out forwards;
+      z-index: 9999;
+    }
+
+    @keyframes popHeart {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+      100% { transform: translate(-50%, -120px) scale(1.5); opacity: 0; }
+    }
+
+    /* Floating Music Control Button */
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 2px solid #ff4d6d;
+      color: #c9184a;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      z-index: 100;
+      transition: all 0.3s;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1) rotate(15deg);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Glassmorphism Card Style */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      border-radius: 30px;
+      padding: 35px 22px;
+      box-shadow: 0 20px 40px rgba(255, 77, 109, 0.25);
+    }
+
+    /* Screen 1: Lock Screen */
+    #lock-screen {
+      animation: zoomIn 0.6s ease-out;
+    }
+
+    .title-cursive {
+      font-family: 'Caveat', cursive;
+      font-size: 3rem;
+      color: #c9184a;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .code-input-wrapper {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .code-input {
+      width: 80%;
+      max-width: 280px;
+      padding: 14px 20px;
+      border: 2px solid #ff758f;
+      border-radius: 20px;
+      font-size: 1.4rem;
+      text-align: center;
+      outline: none;
+      letter-spacing: 6px;
+      color: #590d22;
+      background: #fff;
+      transition: all 0.3s;
+    }
+
+    .code-input.shake {
+      animation: shake 0.4s ease-in-out;
+      border-color: #ff0033;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .btn-glow {
+      background: linear-gradient(45deg, #ff4d6d, #c9184a);
+      color: white;
+      border: none;
+      padding: 14px 45px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(201, 24, 74, 0.4);
+      transition: all 0.3s;
+    }
+
+    .btn-glow:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(201, 24, 74, 0.5);
+    }
+
+    /* Screen 2: Welcome Screen & Photo */
+    #welcome-screen {
+      display: none;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .photo-frame {
+      width: 170px;
+      height: 170px;
+      margin: 0 auto 25px auto;
+      border-radius: 50%;
+      padding: 7px;
+      background: linear-gradient(45deg, #ff4d6d, #ff8fa3, #ffffff);
+      box-shadow: 0 12px 30px rgba(255, 77, 109, 0.5);
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #fff;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); box-shadow: 0 12px 30px rgba(255, 77, 109, 0.4); }
+      50% { transform: scale(1.07); box-shadow: 0 18px 40px rgba(255, 77, 109, 0.7); }
+    }
+
+    /* Screen 3: Main Screen */
+    #main-screen {
+      display: none;
+      width: 100%;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: space-around;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 8px;
+      border-radius: 25px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 9px 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #a4133c;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: #ff4d6d;
+      color: white;
+      box-shadow: 0 4px 12px rgba(255, 77, 109, 0.35);
+    }
+
+    .card-content {
+      text-align: left;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .card-title {
+      font-family: 'Caveat', cursive;
+      font-size: 2.5rem;
+      color: #800f2f;
+      margin-bottom: 15px;
+    }
+
+    .card-subtitle {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      color: #ff4d6d;
+      margin-bottom: 15px;
+      background: #fff;
+      padding: 8px 18px;
+      border-radius: 15px;
+      border: 1px dashed #ff758f;
+      display: inline-block;
+    }
+
+    /* Letter Typewriter Text */
+    .letter-box {
+      background: white;
+      padding: 22px;
+      border-radius: 20px;
+      color: #444;
+      line-height: 1.8;
+      font-size: 1rem;
+      border: 1px solid #ffccd5;
+      min-height: 180px;
+      position: relative;
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: #ff4d6d;
+      animation: blink 0.7s infinite;
+      margin-left: 2px;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* Counter Widget */
+    .counter-container {
+      background: #fff;
+      padding: 15px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+      border: 1px solid #ffccd5;
+      text-align: center;
+    }
+
+    .counter-digits {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #c9184a;
+      margin-top: 5px;
+    }
+
+    /* Reasons Generator Card */
+    .reason-box {
+      background: #fff0f3;
+      padding: 20px;
+      border-radius: 18px;
+      border: 2px dashed #ff758f;
+      text-align: center;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .reason-box:active { transform: scale(0.98); }
+
+    /* Lists */
+    .item-box {
+      background: white;
+      padding: 15px;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid #ffccd5;
+    }
+
+    .item-icon { font-size: 1.5rem; color: #ff4d6d; }
+    .item-title { font-weight: 600; color: #590d22; }
+    .item-sub { font-size: 0.85rem; color: #777; }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 2px solid #ff8fa3;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .gallery-grid img:hover { transform: scale(1.04); }
+
+    /* Lightbox Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 20px;
+      border: 3px solid #fff;
+      box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+    }
+
+    /* Keyframes */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes zoomIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+
+    /* Mobile Tweaks */
+    @media (max-width: 600px) {
+      .title-cursive { font-size: 2.3rem !important; }
+      .photo-frame { width: 140px; height: 140px; }
+      .tab-btn { flex: 1 1 30%; font-size: 0.8rem; padding: 8px 6px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Audio Button -->
+  <button class="music-btn" onclick="toggleAudio()" id="musicToggle">🎵</button>
+  <audio id="bgAudio" loop src="Elvis Presley - Cant Help Falling in Love Lyrics [youaretube.com].mp3"></audio>
+
+  <!-- Lightbox Modal -->
+  <div class="modal" id="imgModal" onclick="closeModal()">
+    <img id="modalImg" src="" alt="Full Preview">
+  </div>
+
+  <div class="container">
+
+    <!-- 1. Lock Screen -->
+    <div id="lock-screen" class="glass-card">
+      <h2 class="title-cursive">Enter our secret code 🔐</h2>
+      <div class="code-input-wrapper">
+        <input type="password" id="passInput" class="code-input" placeholder="••••" maxlength="6">
+      </div>
+      <button class="btn-glow" onclick="checkCode()">Unlock My Heart ❤️</button>
+    </div>
+
+    <!-- 2. Welcome Screen -->
+    <div id="welcome-screen">
+      <div class="photo-frame">
+        <!-- Beddel 'couple.jpg' b'taswiretkom -->
+        <img src="beautiful.png" alt="Us" id="couple-img">
+      </div>
+      <h1 class="title-cursive" style="font-size: 3.3rem; color: #fff; text-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        Welcome my love, enjoy your stay 💕
+      </h1>
+    </div>
+
+    <!-- 3. Main Dashboard -->
+    <div id="main-screen" class="glass-card">
+
+      <div class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab('letter', this)">💌 Letter</button>
+        <button class="tab-btn" onclick="openTab('moments', this)">⏳ Story</button>
+        <button class="tab-btn" onclick="openTab('notes', this)">📝 Notes</button>
+        <button class="tab-btn" onclick="openTab('music', this)">🎵 Songs</button>
+        <button class="tab-btn" onclick="openTab('gallery', this)">🖼️ Flowers</button>
+      </div>
+
+      <!-- Tab 1: Love Letter with Typewriter -->
+      <div id="tab-letter" class="card-content">
+        <h2 class="card-title">My Dearest</h2>
+        <div class="card-subtitle">A Letter For You 💖</div>
+        <div class="letter-box">
+          <span id="typed-text"></span><span class="typewriter-cursor"></span>
+        </div>
+      </div>
+
+      <!-- Tab 2: Days Together Counter & Love Reasons Generator -->
+      <div id="tab-moments" class="card-content" style="display: none;">
+        <h2 class="card-title">Our Journey</h2>
+        <div class="counter-container">
+          <div style="color: #777; font-size: 0.9rem;">We have been together for:</div>
+          <div class="counter-digits" id="loveCounter">0 Days 💕</div>
+        </div>
+
+        <div class="reason-box" onclick="generateReason()">
+          <div style="font-weight: 600; color: #c9184a; font-size: 0.95rem;">Click to see why I love you 💖</div>
+          <div id="reasonText" style="margin-top: 8px; color: #555; font-style: italic;">"Click here..."</div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Reminders & Notes -->
+      <div id="tab-notes" class="card-content" style="display: none;">
+        <h2 class="card-title">Some reminders 📝</h2>
+        <div class="item-box">
+          <div class="item-icon">✨</div>
+          <div class="item-title">Take care always</div>
+        </div>
+        <div class="item-box">
+          <div class="item-icon">🍓</div>
+          <div class="item-title">Eat on time</div>
+        </div>
+        <div class="item-box">
+          <div class="item-icon">💖</div>
+          <div class="item-title">You're mine, always.</div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Music Playlist -->
+      <div id="tab-music" class="card-content" style="display: none;">
+        <h2 class="card-title">Songs that remind me of you</h2>
+        <div class="item-box">
+          <div class="item-icon">🎵</div>
+          <div>
+            <div class="item-title">Her</div>
+            <div class="item-sub">by JVKE</div>
+          </div>
+        </div>
+        <div class="item-box">
+          <div class="item-icon">🎵</div>
+          <div>
+            <div class="item-title">I was made for lovin' you</div>
+            <div class="item-sub">by kiss</div>
+          </div>
+        </div>
+        <div class="item-box">
+          <div class="item-icon">🎵</div>
+          <div>
+            <div class="item-title">Wicked Game</div>
+            <div class="item-sub">by  chris isaak</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 5: Photo Gallery with Lightbox -->
+      <div id="tab-gallery" class="card-content" style="display: none;">
+        <h2 class="card-title">Flowers for you 🌸</h2>
+        <div class="gallery-grid">
+          <img src="WhatsApp Image 2026-10-08 at 18.58.21.jpeg" onclick="zoomImage(this.src)">
+          <img src="WhatsApp Image 2026-10-08 at 18.58.22 (1).jpeg" onclick="zoomImage(this.src)">
+          <img src="WhatsApp Image 2026-10-08 at 18.58.22 (2).jpeg" onclick="zoomImage(this.src)">
+          <img src="WhatsApp Image 2026-10-08 at 18.58.22 (3).jpeg" onclick="zoomImage(this.src)">
+          <img src="WhatsApp Image 2026-10-08 at 18.58.22.jpeg" onclick="zoomImage(this.src)">
+          <img src="her favorite.jpeg" onclick="zoomImage(this.src)">
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const SECRET_CODE = "120505"; // Password
+    const START_DATE = new Date("2018-01-01"); // Start date (YYYY-MM-DD)
+const letterContent = "I lived with you for 8 years, and every year my love for you grew stronger, every moment, even in your worst moments. I love you. Actually, I don't have the right to say it because you are always the most beautiful, the most wonderful, and the kindest. Every time I look at you I have to invent a new definition of beauty because the old one was never enough.\n\nEvery day with you feels like a beautiful dream that I never want to wake up from. Your smile brightens my darkest days, and your laughter is my favourite melody, you are the best thing happened in my life I'm so grateful to have you.\n\nAnd I know I'm not perfect, but I want to be everything you dream of. I want to be the man who understands you, not just the big things, but the small details too. I want you to tell me what you like, what makes you laugh, what makes you feel safe. Teach me how to love you the way you want to be loved. I don't want to assume I know what you need. I want to listen, to learn. Your happiness means everything to me and I'll never stop trying to be the man who brings it to you. I want to be the one who shows up for you, who gets it right, who learns from my mistakes. I'll always be ready to grow, to change, and to love you more deeply than I did yesterday. Tell me your dreams, your desires, your fears, and I promise I'll be right here. You deserve to be loved in a way that feels right to you, and I'm here, willing to do whatever it takes to be that person for you because you're my number one.\n\nThis is my promise to you:\nI am not with you for the short term,\nI am not here to waste your time,\nI am here to build a life,\nA future and a story with you.\nI want to spend the rest of my life waking up next to you.\nI am in it for the long haul,\nWith my best friend by my side.\n\nLoving you is not a choice, it's a beautiful kind of madness I never want to heal from. ❤️\n\nYour Batman, Amen ";
+    // 1. Click-Hearts Spawner
+    document.addEventListener('click', function(e) {
+      if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+      const heart = document.createElement('div');
+      heart.classList.add('click-heart');
+      const icons = ['💖', '❤️', '🌸', '✨', '💕'];
+      heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+      heart.style.left = e.clientX + 'px';
+      heart.style.top = e.clientY + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 800);
+    });
+
+    // 2. Background Heart Generator
+    function createBgHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('bg-heart');
+      const icons = ['❤️', '💖', '💕', '🌸', '✨'];
+      heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createBgHeart, 400);
+
+    // 3. Lock Screen Check
+    function checkCode() {
+      const input = document.getElementById('passInput');
+      if (input.value === SECRET_CODE) {
+        for(let i=0; i<30; i++) {
+          setTimeout(createBgHeart, i * 30);
+        }
+
+        document.getElementById('lock-screen').style.display = 'none';
+        const welcome = document.getElementById('welcome-screen');
+        welcome.style.display = 'block';
+
+        const audio = document.getElementById('bgAudio');
+        audio.play().catch(() => {});
+
+        setTimeout(() => {
+          welcome.style.display = 'none';
+          document.getElementById('main-screen').style.display = 'block';
+          startTypewriter();
+          updateCounter();
+        }, 3200);
+      } else {
+        input.classList.add('shake');
+        setTimeout(() => input.classList.remove('shake'), 400);
+      }
+    }
+
+    // 4. Typewriter Effect
+    let typeIdx = 0;
+    function startTypewriter() {
+      const target = document.getElementById('typed-text');
+      target.innerHTML = "";
+      typeIdx = 0;
+      function type() {
+        if (typeIdx < letterContent.length) {
+          let char = letterContent.charAt(typeIdx);
+          target.innerHTML += (char === '\n') ? '<br>' : char;
+          typeIdx++;
+          setTimeout(type, 35);
+        }
+      }
+      type();
+    }
+
+    // 5. Love Days Counter
+    function updateCounter() {
+      const now = new Date();
+      const diffTime = Math.abs(now - START_DATE);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('loveCounter').innerText = `${diffDays} Days Together 💕`;
+    }
+
+    // 6. Reasons Generator
+    const loveReasons = [
+      "Your beautiful smile that makes my whole day brighter. ✨",
+      "The warm feeling I get every time I hear your voice. 🎧",
+      "How caring and sweet you are with me. 💖",
+      "Your adorable laugh that is my favorite sound in the world. 🎶",
+      "Simply because you are YOU, my favorite person ever! ❤️"
+    ];
+    function generateReason() {
+      const random = loveReasons[Math.floor(Math.random() * loveReasons.length)];
+      document.getElementById('reasonText').innerText = `"${random}"`;
+    }
+
+    // 7. Navigation Tabs
+    function openTab(tabName, element) {
+      const tabs = ['letter', 'moments', 'notes', 'music', 'gallery'];
+      tabs.forEach(t => document.getElementById('tab-' + t).style.display = 'none');
+
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+      document.getElementById('tab-' + tabName).style.display = 'block';
+      element.classList.add('active');
+
+      if(tabName === 'letter' && typeIdx >= letterContent.length) {
+        startTypewriter();
+      }
+    }
+
+    // 8. Lightbox Modal
+    function zoomImage(src) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('imgModal').style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('imgModal').style.display = 'none';
+    }
+
+    // 9. Audio Toggle
+    function toggleAudio() {
+      const audio = document.getElementById('bgAudio');
+      const btn = document.getElementById('musicToggle');
+      if (audio.paused) {
+        audio.play();
+        btn.innerHTML = "🎵";
+      } else {
+        audio.pause();
+        btn.innerHTML = "🔇";
+      }
+    }
+  </script>
+</body>
+</html>
